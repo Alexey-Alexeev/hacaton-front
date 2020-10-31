@@ -7,6 +7,11 @@ export default [
     {
         path: '/schoolboy',
         name: 'schoolboy',
-        component: () => import('../pages/schoolboy/TaskLayout'),
+        component: () => import('../pages/schoolboy/task-list/TaskList'),
+    },
+    {
+        path: '/schoolboy/task/:id',
+        name: 'schoolboy-task',
+        component: () => import('../pages/schoolboy/task-execute/TaskLayout'),
     },
 ]

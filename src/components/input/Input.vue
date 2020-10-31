@@ -12,6 +12,12 @@
 export default {
   name: 'Input',
   props: {
+    value: {
+      type: String,
+      default() {
+        return null;
+      },
+    },
     placeholder: {
       type: String,
       default() {
@@ -23,7 +29,7 @@ export default {
       default() {
         return 'text'
       },
-    }
+    },
   },
   data() {
     return {
@@ -32,10 +38,18 @@ export default {
   },
   methods: {
     handleInput(e) {
-      this.internalValue = e.target.value;
-    }
-  }
-}
+      this.$emit('input', e.target.value);
+    },
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.internalValue = val;
+      },
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>

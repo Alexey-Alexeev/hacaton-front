@@ -1,10 +1,17 @@
 <template>
-  <div class="login-container">
+  <form class="login-container">
     <div class="create">
       Создать учетную запись
     </div>
-    <custom-input type="text" placeholder="Login" />
-    <custom-input type="password" placeholder="Password" />
+    <custom-input
+        type="text"
+        placeholder="Login"
+        v-model="login" />
+    <custom-input
+        type="password"
+        placeholder="Password"
+        v-model="password"
+        autocomplete="on" />
     <div class="agreement">
       <agreement-icon/>
       <span class="agreement-text">
@@ -12,7 +19,13 @@
         </span>
     </div>
     <div>
-      <button class="button"> Регистрация </button>
+      <button
+          class="button"
+          type="button"
+          @click="logIn()"
+      >
+        Регистрация
+      </button>
     </div>
     <div class="account">
       Уже есть аккаунт?
@@ -20,10 +33,12 @@
         Авторизоваться
       </a>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 import AgreementIcon from '@/pages/login/AgreementIcon';
 
 export default {
@@ -31,6 +46,29 @@ export default {
   components: {
     AgreementIcon
   },
+  data() {
+    return {
+      login: null,
+      password: null,
+    };
+  },
+  computed: {
+    ...mapGetters(['USER', 'TEACHER', 'SCHOOLBOY']),
+  },
+  methods: {
+    async logIn() {
+      if (this.login && this.password) {
+        await this.GET_USER({ login: this.login, password: this.password});
+
+        if (this.USER) {
+          const routerName = this.USER.role.toLowerCase();
+          await this.$router.push(routerName);
+        }
+      }
+    },
+
+    ...mapActions(['GET_USER', 'GET_TEACHER', 'GET_SCHOOLBOY']),
+  }
 }
 </script>
 
@@ -77,6 +115,7 @@ export default {
   line-height: 17px
   color:  #FFFFFF
   text-transform: capitalize
+  cursor: pointer
 
 .account
   margin-top: -10px
