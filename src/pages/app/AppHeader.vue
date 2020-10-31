@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <span class="project-logo">REMOTE SHOOL</span>
+    <span class="project-logo">{{ welcome }}</span>
     <span class="task" v-if="isShowTaskNumber">{{ taskLabel }}</span>
     <user-menu/>
   </div>
@@ -10,14 +10,14 @@
 import { mapGetters } from 'vuex';
 
 import UserMenu from '@/pages/app/UserMenu';
-import schoolboy from '@/mixins/schoolboy';
+import person from '@/mixins/person';
 
 export default {
   name: 'AppHeader',
   components: {
     UserMenu
   },
-  mixins: [ schoolboy ],
+  mixins: [ person ],
   async created() {
     this.routeName = this.$route.name;
     await this.getPerson();
@@ -33,7 +33,13 @@ export default {
       }
       return '';
     },
-    ...mapGetters(['SCHOOLBOY_TASK_LIST', 'SCHOOLBOY']),
+    welcome() {
+      if (this.USER) {
+        return `Здравствуйте, ${this.USER.name}`;
+      }
+      return 'Здравствуйте!';
+    },
+    ...mapGetters(['SCHOOLBOY_TASK_LIST', 'USER']),
   }
 
 };

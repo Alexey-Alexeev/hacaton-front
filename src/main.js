@@ -12,6 +12,7 @@ import Vuelidate from 'vuelidate'
 import '../public/css/main.css'
 import '../public/sass/main.sass'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import vuetify from '@/plugins/vuetify'
 
 Object.keys(components).forEach(key => {
   Vue.component(key, components[key]);
@@ -24,6 +25,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuelidate)
 
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App)

@@ -13,7 +13,7 @@
       ЗДЕСЬ БУДЕТ ВЫВВВООООД
     </div>
     <div class="button-container">
-        <div class="button-review">
+        <div class="button-review" @click="save">
           Сохранить результат
         </div>
         <div class="button-review" @click="visible=false">
@@ -42,6 +42,12 @@ export default {
     return {
       visible: false,
     };
+  },
+  methods: {
+    save(){
+      this.$emit('save');
+      this.visible = false;
+    },
   },
   watch: {
     value: {

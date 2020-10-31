@@ -1,5 +1,5 @@
 <template>
-  <div class="list-container">
+  <div class="list-container" v-if="isRouteAvailable('SCHOOLBOY')">
     <div v-if="isShowGrid" class="header">
       <div class="title">
         Домашние задания
@@ -25,17 +25,19 @@
 import { mapGetters } from 'vuex';
 
 import SchoolboyTaskCard from '@/pages/schoolboy/task-list/SchoolboyTaskCard';
+import route from '@/mixins/route';
 
 export default {
   name: 'SchoolboyTaskList',
   components: {
     SchoolboyTaskCard,
   },
+  mixins: [route],
   created() {
     setTimeout(() => {
       this.taskList = this.SCHOOLBOY_TASK_LIST;
       this.firstDumpTaskList = this.SCHOOLBOY_TASK_LIST;
-    }, 60);
+    }, 100);
   },
   data() {
     return {

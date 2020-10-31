@@ -1,12 +1,36 @@
 import axios from 'axios';
 import TrySchoolboy from "@/domain/TrySchoolboy";
 import ClassSchoolboy from "@/domain/ClassSchoolboy";
+import User from "@/domain/User";
+import TeacherTask from "@/domain/TeacherTask";
 
 axios.defaults.baseURL = 'http://localhost:8080/';
 
 export default {
     getUser(login, password) {
-        return axios.get(`user/?login=${login}&password=${password}`);
+        return axios.get(`user/auth?login=${login}&password=${password}`);
+    },
+
+    getUserById(userId) {
+        return axios.get(`user/${userId}`);
+    },
+
+    async getAllUser() {
+        const response = await axios.get('user/');
+        return response && response.data
+            ? response.data.map(us => new User(us))
+            : [];
+    },
+
+    async deleteUserById(userId) {
+        await axios.delete(`user/delete/${userId}`)
+            .then(() => {
+                return true;
+            })
+            .catch((e) => {
+                console.log(e);
+                return false;
+            })
     },
 
     getSchoolboy(userId) {
@@ -37,4 +61,30 @@ export default {
         const response = await axios.post(`task/save`, taskTeacher);
         return response && response.data;
     },
+    async getAllTasks() {
+        const response = await axios.get('task/');
+        return response && response.data
+            ? response.data.map(us => new TeacherTask(us))
+            : [];
+    },
+    async deleteTaskById(userId) {
+        await axios.delete(`task/delete/${userId}`)
+            .then(() => {
+                return true;
+            })
+            .catch((e) => {
+                console.log(e);
+                return false;
+            })
+    },
+    async saveUser(user) {
+        await axios.post('user/save', user)
+            .then(() => {
+                alert('Пользователь успешно зарегестрирован');
+            })
+            .catch(() => {
+                console.log('Такой пользователь уже существует');
+                return false;
+            });
+    }
 };

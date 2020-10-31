@@ -1,25 +1,18 @@
 <template>
   <div class="parameters-layout" v-if="task">
     <div class="param-title">
+      Легенда
+      <custom-checker v-model="isLegendShow" />
+    </div>
+    <p class="param-description" v-if="isLegendShow">
+      {{ task.legend }}
+    </p>
+    <div class="param-title">
       Задание
       <custom-checker v-model="isTaskShow" />
     </div>
     <p class="param-description" v-if="isTaskShow">
       {{ task.description }}
-    </p>
-    <div class="param-title">
-      Входные данные
-      <custom-checker v-model="isInputShow" />
-    </div>
-    <p class="param-description" v-if="isInputShow">
-      {{ task.input }}
-    </p>
-    <div class="param-title">
-      Выходные данные
-      <custom-checker v-model="isOutputShow" />
-    </div>
-    <p class="param-description" v-if="isOutputShow">
-      {{ task.output }}
     </p>
   </div>
 
@@ -39,7 +32,7 @@ export default {
   data() {
     return {
       isTaskShow: true,
-      isInputShow: false,
+      isLegendShow: true,
       isOutputShow: false,
     }
   }
@@ -47,7 +40,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
 .parameters-layout
   width: 25vw
   padding: 30px
@@ -74,6 +66,4 @@ export default {
   line-height: 17px
   margin: 0 0 30px
   overflow: auto
-
-
 </style>

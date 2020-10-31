@@ -1,24 +1,33 @@
 <template>
-  <div v-if="task" class="container">
+  <div v-if="task && isRouteAvailable('TEACHER')" class="task-container">
 
     <div class="main-info">
       <div class="task-info">
         Задание
+        <input class="input input-name" v-model="task.name">
+        Легенда
+        <textarea
+            class="description input"
+            v-model="task.legend"
+            placeholder="Легенда (необязательное поле)"
+            @keydown="handleTab($event, 'legend')"/>
+        Условие задания
         <textarea
             class="description input"
             v-model="task.description"
             placeholder="Опишите задачу"
-            @keydown="handleTab"/>
+            @keydown="handleTab($event, 'description')"/>
       </div>
       <div class="test-data-space">
         <div
-            v-for="(data, key) in testData"
+            v-for="(data, key) in task.testTaskList"
             class="test-data"
             :key="`input_${data.input}_${key}_output_${data.output}_${key}`"
         >
           <span class="test-data-title"> {{ `Чекер ${key + 1}` }} </span>
           Входные данные
           <input
+              id="input"
               class="input input-task"
               :value="data.input"
               @change="data.input = $event.target.value"
@@ -74,15 +83,15 @@ import { mapGetters } from 'vuex';
 import http from '@/http/http';
 
 import TeacherTask from '@/domain/TeacherTask';
+import TestTask from '@/domain/TestTask';
+import route from '@/mixins/route';
 
 export default {
   name: 'TeacherTask',
+  mixins: [route],
   data() {
     return {
       task: null,
-      testData: [
-        { input: null, output: null }
-      ],
       classList: [],
     }
   },
@@ -94,6 +103,7 @@ export default {
       }, 60);
     } else {
       this.task = new TeacherTask();
+      this.task.testTaskList.push(new TestTask());
     }
   },
   computed: {
@@ -101,35 +111,34 @@ export default {
   },
   methods: {
     clear() {
+      this.task.testTaskList = [{ input: null, output: null }];
     },
     async saveTask() {
-      // TODO
-      this.task.name = 'АУЕ БРАТУХА БЛЯ ПОЕХАЛОООО';
-      this.task.output = this.outputs.filter(v => !!v).join(';');
-      this.task.input = this.inputs.filter(v => !!v).join(';');
       this.task.teacherId = this.TEACHER.id;
       const isSaved = await http.saveTask(this.task);
       if (isSaved) {
-        await this.$router.push('teacher');
+        const foundTask = this.TEACHER_TASK_LIST.find(ts => ts.id);
+        if (!foundTask) {
+          this.TEACHER_TASK_LIST.push(this.task);
+        }
+        await this.$router.push({ name: 'teacher' });
       }
-
-
     },
-    handleTab(e) {
+    handleTab(e, propName) {
       if (e.key === 'Tab') {
         e.preventDefault();
-        this.task.description = this.task.description.concat('  ');
+        this.task[propName] = this.task[propName].concat('  ');
       }
     },
     addNewTestData() {
-      this.testData.push({ input: null, output: null });
+      this.task.testTaskList.push(new TestTask());
     }
   },
 }
 </script>
 
 <style lang="sass" scoped>
-  .container
+  .task-container
     width: 100vw
     background: #000000
 
@@ -170,8 +179,6 @@ export default {
     font-size: 22px
     margin-bottom: 20px
 
-
-
   .input-task
     width: 460px
     margin-top: 15px
@@ -200,6 +207,11 @@ export default {
     resize: none
     color: #FFFFFF
     margin-bottom: 10px
+
+  .input-name
+    margin-top: 5px
+    padding: 20px
+    line-height: 10px
 
     &::placeholder
       color: #FFFFFF

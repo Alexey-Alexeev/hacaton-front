@@ -1,5 +1,5 @@
 <template>
- <div v-if="task" class="container">
+ <div v-if="task && isRouteAvailable('SCHOOLBOY')" class="task-container">
    <div class="main-info">
        <task-parameters-layout :task="task"/>
        <textarea
@@ -41,13 +41,16 @@
 </template>
 
 <script>
+import http from '@/http/http';
+
 import { mapGetters, mapMutations } from 'vuex';
-import TrySchoolboy from "@/domain/TrySchoolboy";
+import TrySchoolboy from '@/domain/TrySchoolboy';
+
+import route from '@/mixins/route';
+
 import TaskParametersLayout from '@/pages/schoolboy/task-execute/TaskParametersLayout';
 import TriesLayout from '@/pages/schoolboy/task-execute/TriesLayout';
-import schoolboy from "@/mixins/schoolboy";
-import http from "@/http/http";
-import ModalResult from "@/pages/schoolboy/task-execute/ModalResult";
+import ModalResult from '@/pages/schoolboy/task-execute/ModalResult';
 
 export default {
   name: 'TaskLayout',
@@ -56,7 +59,7 @@ export default {
     TriesLayout,
     TaskParametersLayout
   },
-  mixins: [ schoolboy ],
+  mixins: [ route ],
   data() {
     return {
       isTryComplete: false,
@@ -127,7 +130,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
- .container
+ .task-container
    width: 100vw
    background: #000000
 

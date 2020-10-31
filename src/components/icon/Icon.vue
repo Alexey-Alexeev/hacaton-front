@@ -1,5 +1,5 @@
 <template>
-  <div class="cs-icon" :class="{ [containerSize]: true }">
+  <div class="cs-icon" :class="{ [containerSize]: true }" @click="$emit('click')">
     <i :class="{ [name]: true }" :style="{ backgroundImage: svgIcon }" ></i>
   </div>
 </template>

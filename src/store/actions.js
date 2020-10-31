@@ -4,9 +4,17 @@ import Schoolboy from '@/domain/Schoolboy';
 import Teacher from "@/domain/Teacher";
 
 export default {
-    GET_USER({ commit }, params) {
+   async GET_USER({ commit }, params) {
         const { login, password } = params;
         return http.getUser(login, password)
+            .then(({ data }) => {
+                const user = new User(data);
+                commit('SET_USER', user);
+            })
+            .catch((er) => console.log(er))
+    },
+    GET_USER_BY_ID({ commit }, userId) {
+        return http.getUserById(userId)
             .then(({ data }) => {
                 const user = new User(data);
                 commit('SET_USER', user);

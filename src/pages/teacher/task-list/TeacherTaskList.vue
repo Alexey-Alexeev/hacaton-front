@@ -1,5 +1,5 @@
 <template>
-  <div class="list-container">
+  <div class="list-container" v-if="isRouteAvailable('TEACHER')">
     <div class="header">
       <div class="title">
         Домашние задания
@@ -29,12 +29,14 @@
 import { mapGetters } from 'vuex';
 
 import TeacherTaskCard from '@/pages/teacher/task-list/TeacherTaskCard';
+import route from '@/mixins/route';
 
 export default {
   name: 'SchoolboyTaskList',
   components: {
     TeacherTaskCard,
   },
+  mixins: [route],
   data() {
     return {
       firstDumpTaskList: [],

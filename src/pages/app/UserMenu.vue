@@ -64,11 +64,11 @@ export default {
       menuRows.push(menuValues.exit);
       return menuRows;
     },
-    ...mapGetters(['SCHOOLBOY', 'TEACHER']),
+    ...mapGetters(['SCHOOLBOY', 'TEACHER', 'USER']),
   },
   methods: {
     goTo(row) {
-      if (row.label === 'login') {
+      if (row.routeName === 'login') {
         this.CLEAR_USER();
         this.CLEAR_SCHOOLBOY();
         this.CLEAR_TEACHER();

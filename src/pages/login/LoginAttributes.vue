@@ -1,7 +1,7 @@
 <template>
   <form class="login-container">
     <div class="create">
-      Создать учетную запись
+      Авторизоваться
     </div>
     <custom-input
         ref="input_login"
@@ -15,12 +15,6 @@
         placeholder="Password"
         v-model="password"
     />
-    <div class="agreement">
-      <agreement-icon/>
-      <span class="agreement-text">
-          Нажимая на кнопку “Регистрация” , вы принимаете условия пользовательского соглашения
-        </span>
-    </div>
     <div>
       <button
           class="button"
@@ -28,13 +22,12 @@
           type="button"
           @click="logIn()"
       >
-        Регистрация
+        Авторизоваться
       </button>
     </div>
     <div class="account">
-      Уже есть аккаунт?
-      <a href="URL" class="source">
-        Авторизоваться
+      <a href="" class="source" @click.prevent="$router.push({ name: 'registration' })">
+        Зарегистрироваться
       </a>
     </div>
   </form>
@@ -43,13 +36,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import AgreementIcon from '@/pages/login/AgreementIcon';
-
 export default {
   name: 'LoginAttributes',
-  components: {
-    AgreementIcon
-  },
   data() {
     return {
       login: null,
@@ -62,9 +50,10 @@ export default {
   methods: {
     async logIn() {
       if (!this.isError()) {
+        console.log(this.USER);
         await this.GET_USER({ login: this.login, password: this.password});
-
         if (this.USER) {
+          console.log(this.USER);
           localStorage.setItem('userId', this.USER.id);
           localStorage.setItem('role', this.USER.role);
           const routerName = this.USER.role.toLowerCase();
@@ -80,7 +69,7 @@ export default {
       }
       return true;
     },
-    ...mapActions(['GET_USER']),
+    ...mapActions(['GET_USER']  ),
   },
 }
 </script>
@@ -89,11 +78,11 @@ export default {
 
 
 .login-container
-  margin-top: 110px
+  margin-top: 220px
   width: 380px
   background: #FFFFFF
   display: grid
-  grid-template-rows: 60px 50px 50px 70px 50px 40px 800px
+  grid-template-rows: 60px 50px 50px 50px 50px 40px 800px
   grid-template-columns: 100%
   grid-gap: 20px
 

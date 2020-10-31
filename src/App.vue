@@ -25,6 +25,7 @@ export default {
           'schoolboy-task',
           'teacher',
           'teacher-task',
+          'admin'
       ];
 
       return pageList.includes(this.routeName);
