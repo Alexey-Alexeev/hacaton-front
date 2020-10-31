@@ -1,9 +1,9 @@
 <template>
-  <div class="task-card">
-    <div class="task-title"> Title </div>
-    <div class="task-description"> Описание задания, занимающее несколько строк </div>
-    <task-result/>
-    <div class="button">{{ buttonLabel }}</div>
+  <div class="task-card" v-if="task">
+    <div class="task-title"> {{ task.name }}  </div>
+    <div class="task-description"> {{ task.description }} </div>
+    <task-result :result="task.bestResult"/>
+    <div class="button" @click="goToTask(task.id)">{{ buttonLabel }}</div>
   </div>
 </template>
 
@@ -12,6 +12,14 @@ import TaskResult from '@/pages/schoolboy/task-list/TaskResult';
 export default {
   name: 'TaskCard',
   components: { TaskResult },
+  props: {
+    task: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
+  },
   data() {
     return {
       result: 0,
@@ -19,14 +27,22 @@ export default {
   },
   computed: {
     buttonLabel() {
-      if (this.result === 100) {
-        return 'Продолжить';
-      } else if (this.result > 0) {
-        return 'Посмотреть';
+      if (this.task) {
+        const bestResult = this.task.bestResult;
+        if (bestResult === 100) {
+          return 'Продолжить';
+        } else if (bestResult > 0) {
+          return 'Посмотреть';
+        }
       }
       return 'Приступить';
     },
   },
+  methods: {
+    goToTask(taskId) {
+      this.$router.push({ name: 'schoolboy-task', params: { id: taskId} });
+    }
+  }
 };
 </script>
 
@@ -34,6 +50,7 @@ export default {
 
 .task-card
   width: 240px
+  margin-bottom: 20px
   padding: 20px 40px
   border: 1px solid #5843BE
   box-sizing: border-box

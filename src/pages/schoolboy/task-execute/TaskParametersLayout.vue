@@ -1,24 +1,26 @@
 <template>
-  <div class="parameters-layout">
+  <div class="parameters-layout" v-if="task">
     <div class="param-title">
       Задание
       <custom-checker v-model="isTaskShow" />
     </div>
     <p class="param-description" v-if="isTaskShow">
-      Добавьте в созданный на предыдущем уроке "sppstudio" новый подпроект lesson_2(Qt Widget).
-      Очистите его от посторонних файлов, оставив в нём main.cpp.Создайте в нем файлы myclass.h и myclass.cpp.
-
-      Давайте придумаем функциональность для нашей программы.
-      Пусть она при нажатии на кнопку создаёт окна и если число созданных окон превысит 5, то она закончит выполнение
+      {{ task.description }}
     </p>
     <div class="param-title">
       Входные данные
-      <custom-checker v-model="isOutputShow" />
+      <custom-checker v-model="isInputShow" />
     </div>
+    <p class="param-description" v-if="isInputShow">
+      {{ task.input }}
+    </p>
     <div class="param-title">
       Выходные данные
       <custom-checker v-model="isOutputShow" />
     </div>
+    <p class="param-description" v-if="isOutputShow">
+      {{ task.output }}
+    </p>
   </div>
 
 </template>
@@ -26,6 +28,14 @@
 <script>
 export default {
   name: 'TaskParametersLayout',
+  props: {
+    task: {
+      type: Object,
+      default() {
+        return null;
+      }
+    }
+  },
   data() {
     return {
       isTaskShow: true,
@@ -63,6 +73,7 @@ export default {
   font-size: 14px
   line-height: 17px
   margin: 0 0 30px
+  overflow: auto
 
 
 </style>

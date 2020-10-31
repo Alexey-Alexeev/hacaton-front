@@ -58,14 +58,21 @@ export default {
     background: rgba(0, 0, 0, 0.1)
     border: 2px solid rgba(0, 0, 0, 0.3)
     border-radius: 10px
-    text-transform: uppercase
     outline: none
     font-weight: bold
     font-size: 14px
     line-height: 17px
 
+    &:hover
+      background: rgba(88, 67, 190, 0.1)
+      border: 2px solid rgba(88, 67, 190, 0.3)
+      color: #B2A8E1
+
     &:focus
-      background: white
+      background: #FFFFFF
+      border: 2px solid rgba(0, 0, 0, 0.4)
+      border-radius: 10px
+      color: #999999
 
 
 </style>

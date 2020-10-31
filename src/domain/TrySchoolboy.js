@@ -6,10 +6,10 @@ export default class TrySchoolboy {
         this.id = data.id || createGuid();
         this.taskId = data.taskId || null;
         this.schoolboyId = data.schoolboyId || null;
-        this.code = data.code || null;
+        this.code = data.code || '';
         this.input = data.input || null;
         this.output = data.output || null;
-        this.result = data.result || null;
+        this.result = data.result || 0;
         this.tryNumber = data.tryNumber || null;
     }
 }

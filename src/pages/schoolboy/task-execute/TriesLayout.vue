@@ -3,8 +3,12 @@
     <div class="tries-layout-title">
       Мои попытки
     </div>
-    <try-info></try-info>
-    <try-info></try-info>
+    <try-info
+        v-for="(taskTry,key) in triesList"
+        :key="key"
+        :task-try="taskTry"
+        @setActiveTry="setActiveTry($event)"
+    ></try-info>
   </div>
 </template>
 
@@ -13,7 +17,25 @@ import TryInfo from '@/pages/schoolboy/task-execute/TryInfo';
 
 export default {
   name: 'TriesLayout',
-  components: {TryInfo}
+  components: {
+    TryInfo,
+  },
+  props: {
+    triesList: {
+      type: Array,
+      default() {
+        return [];
+      },
+    }
+  },
+  async created() {
+
+  },
+  methods: {
+    setActiveTry(taskTry) {
+      this.$emit('setActiveTry', taskTry);
+    }
+  }
 };
 </script>
 

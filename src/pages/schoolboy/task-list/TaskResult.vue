@@ -15,7 +15,7 @@ export default {
   props: {
     result: {
       type: Number,
-      default: 50,
+      default: 0,
     }
   },
   computed: {

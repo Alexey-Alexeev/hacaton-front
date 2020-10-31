@@ -61,6 +61,8 @@ export default {
         await this.GET_USER({ login: this.login, password: this.password});
 
         if (this.USER) {
+          localStorage.setItem('userId', this.USER.id);
+          localStorage.setItem('role', this.USER.role);
           const routerName = this.USER.role.toLowerCase();
           await this.$router.push(routerName);
         }
@@ -109,13 +111,20 @@ export default {
   width: 100%
   height: 100%
   outline: none
-  background: #000000
+  background: #5843BE
   border-radius: 10px
   font-weight: bold
   line-height: 17px
   color:  #FFFFFF
   text-transform: capitalize
   cursor: pointer
+  border-color: transparent
+
+  &:hover
+    background: #6346EF
+
+  &:active
+    background: #3D28A7
 
 .account
   margin-top: -10px
