@@ -1,7 +1,7 @@
 <template>
 <div class="layout">
   <div class="icon-container__left">
-    <img src="../../../public/icons/Schoolers.svg" class="schoolers-icon"/>
+    <img src="../../../public/icons/Schoolers.svg" class="schoolboy-icon"/>
   </div>
   <login-attributes/>
   <div class="icon-container__right">
@@ -17,7 +17,13 @@ import LoginAttributes from '@/pages/login/LoginAttributes';
 
 export default {
   name: 'Login',
-  components: { LoginAttributes },
+  components: {
+    LoginAttributes
+  },
+  created() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
+  }
 }
 </script>
 
@@ -33,7 +39,7 @@ export default {
   height: 100vh
   padding-right: 20px
 
-.schoolers-icon
+.schoolboy-icon
   position: absolute
   right: 0
   top: 442px

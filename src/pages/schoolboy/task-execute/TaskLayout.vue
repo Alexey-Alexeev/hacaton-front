@@ -14,7 +14,7 @@
    </div>
    <div class="task-action">
        <div
-           v-if="!isTryComplete && trySchoolboy.code"
+           v-if="isShowReviewButton"
            class="button-review"
            @click="isTryComplete=true"
        >
@@ -24,22 +24,17 @@
          />
          Проверить код
        </div>
+       <modal-result
+           v-model="isTryComplete"
+           :try-schoolboy="trySchoolboy"
+           @save="saveTry"
+       />
        <div
-           v-if="!isTryComplete && trySchoolboy.code"
+           v-if="isShowClearButton"
            class="button-clear"
            @click="clearCode"
        >
          Сбросить
-       </div>
-       <div class="result" v-if="isTryComplete">
-          <div class="value-result"> 70% </div>
-       </div>
-       <div
-           v-if="isTryComplete"
-           class="button-review"
-           @click="saveTry"
-       >
-         Сохранить результат
        </div>
    </div>
  </div>
@@ -52,10 +47,12 @@ import TaskParametersLayout from '@/pages/schoolboy/task-execute/TaskParametersL
 import TriesLayout from '@/pages/schoolboy/task-execute/TriesLayout';
 import schoolboy from "@/mixins/schoolboy";
 import http from "@/http/http";
+import ModalResult from "@/pages/schoolboy/task-execute/ModalResult";
 
 export default {
   name: 'TaskLayout',
   components: {
+    ModalResult,
     TriesLayout,
     TaskParametersLayout
   },
@@ -66,7 +63,8 @@ export default {
       task: null,
       trySchoolboy: null,
       isTextAreaDisabled: false,
-      triesList: []
+      triesList: [],
+      isModalShow: false,
     }
   },
   async created() {
@@ -78,6 +76,12 @@ export default {
     }, 60);
   },
   computed: {
+    isShowReviewButton() {
+      return !this.isTryComplete && this.trySchoolboy.code && !this.isTextAreaDisabled;
+    },
+    isShowClearButton() {
+      return !this.isTryComplete && this.trySchoolboy.code
+    },
     ...mapGetters(['SCHOOLBOY_TASK_LIST', 'SCHOOLBOY']),
   },
   methods: {
@@ -149,72 +153,6 @@ export default {
    display: flex
    align-items: center
    column-gap: 20px
-
- .button-review
-   border: 2px solid #00D1FF
-   border-radius: 10px
-   color: #00D1FF
-   font-size: 12px
-   height: 4vh
-   padding: 0 46px
-   display: inline-flex
-   flex-wrap: nowrap
-   align-items: center
-   column-gap: 10px
-   overflow: hidden
-   cursor: pointer
-
-   &:hover
-     color: #00F0FF
-     border: 2px solid #00F0FF
-
-   &:active
-     background: rgba(0, 163, 255, 0.1)
-     border: 2px solid #00A3FF
-     color: #00A3FF
-
-
- .button-clear
-   border: 1px solid #FFA800
-   border-radius: 10px
-   color: #FFA800
-   font-size: 12px
-   height: 4vh
-   padding: 0 46px
-   display: inline-flex
-   align-items: center
-   column-gap: 10px
-   cursor: pointer
-
-   &:hover
-     color: #FFD600
-     border: 1px solid #FFD600
-
-   &:active
-     background: rgba(255, 138, 0, 0.1)
-     border: 1px solid #FF8A00
-     color: #FF8A00
-
-
- .result
-   height: 4.5vh
-   width: 31vw
-   border: 1px solid #8DCF00
-   box-sizing: border-box
-   border-radius: 10px
-
- .value-result
-   background: #8DCF00
-   border-radius: 10px 0px 0px 10px
-   width: 22vw
-   height: 100%
-   display: flex
-   justify-content: center
-   align-items: center
-   font-weight: bold
-   font-size: 18px
-   line-height: 22px
-
 
 
 </style>

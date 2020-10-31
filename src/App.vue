@@ -7,17 +7,11 @@
 
 <script>
 import AppHeader from '@/pages/app/AppHeader';
-import schoolboy from "@/mixins/schoolboy";
 
 export default {
   name: 'App',
   components: {
     AppHeader
-  },
-  mixins: [ schoolboy ],
-  async created() {
-    this.routeName = this.$route.name;
-    await this.getSchoolboy();
   },
   data() {
     return {
@@ -29,6 +23,8 @@ export default {
       const pageList = [
           'schoolboy',
           'schoolboy-task',
+          'teacher',
+          'teacher-task',
       ];
 
       return pageList.includes(this.routeName);

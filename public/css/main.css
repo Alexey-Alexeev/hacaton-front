@@ -68,3 +68,112 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
     background: #8DCF00;
 }
+
+.vue-treeselect__control {
+    background: transparent !important;
+    border: 2px solid #00D1FF !important;
+    border-radius: 10px !important;
+    padding: 0 15px !important;
+}
+
+.vue-treeselect--has-value .vue-treeselect__multi-value {
+    margin-bottom: 0 !important;
+    display: flex;
+    align-items: center;
+}
+
+.vue-treeselect__placeholder {
+    color: #00D1FF !important;
+    display: flex ;
+    align-items: center ;
+    font-size: 12px;
+}
+
+.vue-treeselect__control-arrow {
+    width: 17px !important;
+    height: 15px !important;
+    color: #00D1FF !important;
+}
+
+.vue-treeselect__multi-value-item {
+    color: #00A3FF !important;
+    background: #05568B !important;
+    font-size: 18px !important;
+    line-height: 30px !important;
+}
+
+.vue-treeselect__x {
+    height: 13px !important;
+    color: #00D1FF !important;
+    width: 16px !important;
+}
+
+.vue-treeselect__menu {
+    background: transparent !important;
+    color: #00F0FF;
+    border: 2px solid #00F0FF !important;
+    border-radius: 10px !important;
+    margin-top: 10px !important;
+}
+.vue-treeselect:not(.vue-treeselect--disabled):not(.vue-treeselect--focused) .vue-treeselect__control:hover {
+    background: #5D4EA4 !important;
+}
+.vue-treeselect__multi-value-item.vue-treeselect__multi-value-item-new:hover {
+    background: #5D4EA4 !important;
+}
+.vue-treeselect__value-remove {
+    border: none !important;
+}
+.vue-treeselect__value-remove > svg {
+    width: 15px !important;
+    height: 10px !important;
+}
+
+.vue-treeselect__multi-value-item {
+    padding: 0 5px !important;
+    border-radius: 5px !important;
+}
+
+.vue-treeselect__option:hover {
+    background: #5D4EA4 !important;
+}
+.vue-treeselect__option--highlight {
+    background: #5D4EA4 !important;
+}
+
+.vue-treeselect__checkbox--unchecked {
+    background: transparent !important;
+    border-radius: 3px !important;
+    border: 1px solid #00F0FF !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.vue-treeselect__checkbox--checked {
+    position: relative !important;
+    width: 20px !important;
+    height: 20px !important;
+    background: #00F0FF !important;
+}
+.vue-treeselect__check-mark {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-image: url("../icons/check.svg") !important;
+}
+
+.vue-treeselect__checkbox--indeterminate {
+    position: relative !important;
+    width: 20px !important;
+    height: 20px !important;
+    background: #00F0FF !important;
+}
+
+.vue-treeselect__minus-mark {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-image: url("../icons/minus.svg") !important;
+}

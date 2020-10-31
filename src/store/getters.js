@@ -18,6 +18,13 @@ export default {
         return state.TEACHER;
     },
 
+    TEACHER_TASK_LIST(state) {
+        if (state.TEACHER) {
+            return state.TEACHER.taskList;
+        }
+        return  [];
+    },
+
     ACTIVE_TRY(state) {
         return state.ACTIVE_TRY;
     },

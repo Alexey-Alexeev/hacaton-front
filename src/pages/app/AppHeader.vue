@@ -10,11 +10,17 @@
 import { mapGetters } from 'vuex';
 
 import UserMenu from '@/pages/app/UserMenu';
+import schoolboy from '@/mixins/schoolboy';
 
 export default {
   name: 'AppHeader',
   components: {
     UserMenu
+  },
+  mixins: [ schoolboy ],
+  async created() {
+    this.routeName = this.$route.name;
+    await this.getPerson();
   },
   computed: {
     isShowTaskNumber() {
@@ -34,7 +40,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
   .title
     height: 9.7vh
     display: flex
@@ -52,7 +57,4 @@ export default {
     font-weight: 600
     font-size: 18px
     line-height: 22px
-
-
-
 </style>

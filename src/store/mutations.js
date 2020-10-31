@@ -14,6 +14,9 @@ export default {
     SET_TEACHER(state, teacher) {
         state.TEACHER = teacher
     },
+    CLEAR_TEACHER(state) {
+        state.TEACHER = null;
+    },
     SET_ACTIVE_TRY(state, taskTry) {
         state.ACTIVE_TRY = taskTry;
     },

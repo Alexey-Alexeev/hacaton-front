@@ -1,5 +1,6 @@
 import axios from 'axios';
 import TrySchoolboy from "@/domain/TrySchoolboy";
+import ClassSchoolboy from "@/domain/ClassSchoolboy";
 
 axios.defaults.baseURL = 'http://localhost:8080/';
 
@@ -27,5 +28,13 @@ export default {
         if (response && response.data) {
             return new TrySchoolboy(response.data);
         }
-    }
+    },
+    async getClassList() {
+        const response = await axios.get('class-schoolboy/');
+        return response && response.data ? response.data.map(cl => new ClassSchoolboy(cl)) : [];
+    },
+    async saveTask(taskTeacher) {
+        const response = await axios.post(`task/save`, taskTeacher);
+        return response && response.data;
+    },
 };

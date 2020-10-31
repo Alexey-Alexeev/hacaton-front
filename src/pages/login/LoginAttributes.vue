@@ -4,14 +4,17 @@
       Создать учетную запись
     </div>
     <custom-input
+        ref="input_login"
         type="text"
         placeholder="Login"
-        v-model="login" />
+        v-model="login"
+    />
     <custom-input
+        ref="input_password"
         type="password"
         placeholder="Password"
         v-model="password"
-        autocomplete="on" />
+    />
     <div class="agreement">
       <agreement-icon/>
       <span class="agreement-text">
@@ -21,6 +24,7 @@
     <div>
       <button
           class="button"
+          :class="{ 'disabled': isError() }"
           type="button"
           @click="logIn()"
       >
@@ -53,11 +57,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['USER', 'TEACHER', 'SCHOOLBOY']),
+    ...mapGetters(['USER']),
   },
   methods: {
     async logIn() {
-      if (this.login && this.password) {
+      if (!this.isError()) {
         await this.GET_USER({ login: this.login, password: this.password});
 
         if (this.USER) {
@@ -68,9 +72,16 @@ export default {
         }
       }
     },
-
-    ...mapActions(['GET_USER', 'GET_TEACHER', 'GET_SCHOOLBOY']),
-  }
+    isError() {
+      if (this.$refs.input_login && this.$refs.input_password) {
+        const isLoginNull = this.$refs.input_login.$v.$error;
+        const isPasswordNull = this.$refs.input_password.$v.$error;
+        return isLoginNull || isPasswordNull;
+      }
+      return true;
+    },
+    ...mapActions(['GET_USER']),
+  },
 }
 </script>
 
@@ -125,6 +136,10 @@ export default {
 
   &:active
     background: #3D28A7
+
+  &.disabled
+    background: #cccc
+    cursor: default
 
 .account
   margin-top: -10px

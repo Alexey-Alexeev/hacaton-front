@@ -6,9 +6,16 @@
         color="#7F7F7F" />
     <header-checker v-model="isUserMenuShow"/>
     <div class="menu" v-show="isUserMenuShow">
-      <span v-for="(row, key) in menuRows" :key="key" @click="goTo(row)">
+      <div
+          v-for="(row, key) in menuRows"
+          :key="key"
+          class="row-menu"
+          @click="goTo(row)"
+
+      >
+        <custom-icon :name="row.icon"/>
         {{ row.label }}
-      </span>
+      </div>
     </div>
   </div>
 </template>
@@ -18,8 +25,21 @@ import HeaderChecker from '@/components/checker/HeaderChecker';
 import { mapGetters, mapMutations } from 'vuex';
 
 const menuValues = {
-  schoolboyTaskList: { routeName: 'schoolboy', label: 'Вернуться к списку' },
-  exit: { routeName: 'login', label: 'Выйти' },
+  teacherTaskList: {
+    routeName: 'teacher',
+    label: 'Вернуться к списку',
+    icon: 'form',
+  },
+  schoolboyTaskList: {
+    routeName: 'schoolboy',
+    label: 'Вернуться к списку',
+    icon: 'form',
+  },
+  exit: {
+    routeName: 'login',
+    label: 'Выйти',
+    icon: 'circle-arrow-left',
+  },
 }
 
 export default {
@@ -35,24 +55,28 @@ export default {
   computed: {
     menuRows() {
       let menuRows = [];
+      if (this.TEACHER && this.$route.name === 'teacher-task') {
+        menuRows.push(menuValues.teacherTaskList);
+      }
       if (this.SCHOOLBOY && this.$route.name === 'schoolboy-task') {
         menuRows.push(menuValues.schoolboyTaskList);
       }
       menuRows.push(menuValues.exit);
       return menuRows;
     },
-    ...mapGetters(['SCHOOLBOY']),
+    ...mapGetters(['SCHOOLBOY', 'TEACHER']),
   },
   methods: {
     goTo(row) {
       if (row.label === 'login') {
         this.CLEAR_USER();
         this.CLEAR_SCHOOLBOY();
+        this.CLEAR_TEACHER();
       }
-      this.$router.push({ name: row.routeName });
       this.isUserMenuShow = false;
+      this.$router.push({ name: row.routeName });
     },
-    ...mapMutations(['CLEAR_USER', 'CLEAR_SCHOOLBOY'])
+    ...mapMutations(['CLEAR_USER', 'CLEAR_SCHOOLBOY', 'CLEAR_TEACHER'])
   }
 };
 </script>
@@ -71,19 +95,25 @@ export default {
 
 .menu
   position: absolute
-  left: 0
+  width: 220px
+  left: -50px
   top: 8.5vh
-  padding: 5px
-  background: #352872
+  padding: 0 10px
+  background: #404040
   border: 2px solid #404040
   border-radius: 5px
   display: flex
   flex-direction: column
   z-index: 10
 
-  span
+  .row-menu
+    display: flex
+    align-items: center
+    justify-content: flex-start
     cursor: pointer
     opacity: 0.6
+    line-height: 40px
+    column-gap: 10px
     &:hover
       opacity: 1
     &:not(:last-child)

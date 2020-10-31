@@ -1,18 +1,27 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Treeselect from '@riophae/vue-treeselect';
 
 import router from './router'
 import store from './store';
 
-import components from "@/components/components";
+import components from '@/components/components';
+
+import Vuelidate from 'vuelidate'
 
 import '../public/css/main.css'
+import '../public/sass/main.sass'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 Object.keys(components).forEach(key => {
   Vue.component(key, components[key]);
 });
 
-Vue.config.productionTip = false
+Vue.component('tree-select', Treeselect);
+
+Vue.config.productionTip = false;
+
+Vue.use(Vuelidate)
 
 new Vue({
   router,

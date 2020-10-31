@@ -1,14 +1,19 @@
 <template>
   <input
+      class="input"
+      :class="{ 'error': error }"
       :type="type"
       :placeholder="placeholder"
       :value="internalValue"
-      class="input"
+      @focus="$v.$reset()"
+      @blur="$v.$touch()"
       @input="handleInput"
   >
 </template>
 
 <script>
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   name: 'Input',
   props: {
@@ -34,10 +39,17 @@ export default {
   data() {
     return {
       internalValue: null,
+      internalError: false,
+    }
+  },
+  computed: {
+    error() {
+      return this.$v.$error;
     }
   },
   methods: {
     handleInput(e) {
+      this.$v.$touch();
       this.$emit('input', e.target.value);
     },
   },
@@ -47,6 +59,11 @@ export default {
       handler(val) {
         this.internalValue = val;
       },
+    },
+  },
+  validations: {
+    internalValue: {
+      required,
     },
   },
 };
@@ -73,6 +90,10 @@ export default {
       border: 2px solid rgba(0, 0, 0, 0.4)
       border-radius: 10px
       color: #999999
+
+    &.error
+      border-color: #D96980
+      background: #fff
 
 
 </style>
