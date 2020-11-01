@@ -181,3 +181,22 @@ progress::-webkit-progress-value {
 .v-data-table.theme--light .v-data-table__wrapper table .v-data-table-header tr th{
     text-align: start;
 }
+.modal-table.v-data-table.theme--light .v-data-table__wrapper {
+    border: none;
+}
+.modal-table.v-data-table>.v-data-table__wrapper>table {
+    border-spacing: 2px;
+}
+.modal-table.v-data-table.theme--light .v-data-table__wrapper .v-data-table-header {
+    background: #5843BE !important;
+    font-size: 20px;
+}
+.modal-table.v-data-table.theme--light .v-data-table__wrapper table tbody tr {
+    background: #5843BE !important;
+}
+
+.vue-treeselect__single-value {
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 20px;
+}

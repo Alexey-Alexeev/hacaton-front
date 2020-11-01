@@ -46,12 +46,14 @@
         </div>
       </div>
       <div class="class-select">
+        Выберите класс
         <tree-select
+            style="margin-top: 10px"
             valueFormat="Object"
             v-model="task.classSchoolboyList"
             :options="classList"
             multiple
-            placeholder="Выберите класс">
+            placeholder="">
           <div slot="value-label" slot-scope="{ node }">{{ node.raw.name }}</div>
           <label slot="option-label" slot-scope="{ node, labelClassName}" :class="labelClassName">
             {{ node.raw.name }}

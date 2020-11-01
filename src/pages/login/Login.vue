@@ -1,7 +1,6 @@
 <template>
 <div class="layout">
   <div class="icon-container__left">
-    <img src="../../../public/icons/Logo.svg" class="logo"/>
     <img src="../../../public/icons/Schoolers.svg" class="schoolboy-icon"/>
   </div>
   <login-attributes/>
@@ -68,8 +67,4 @@ export default {
     left: 80px
     top: 500px
 
-  .logo
-    position: absolute
-    bottom: 280px
-    right: -200px
 </style>

@@ -7,16 +7,32 @@
   }">
     <span class="modal-title">Результат</span>
     <div class="result">
-      <div class="value-result"> 70% </div>
+      <div class="value-result" :style="{ width: `${result}%` }">
+        <span class="label">{{ `${result}%` }} </span>
+      </div>
     </div>
     <div>
-      ЗДЕСЬ БУДЕТ ВЫВВВООООД
+      <v-data-table
+          disable-sort
+          class="modal-table"
+          v-if="testCasesResult.length > 0"
+          :headers="resultTableHeader"
+          :items="testCasesResult"
+          hide-default-footer
+      >
+        <template #item.output="{ value}">
+          {{ getCorrectOutput(value) }}
+        </template>
+        <template #item.type="{ value }">
+          {{ statuses[value] }}
+        </template>
+      </v-data-table>
     </div>
     <div class="button-container">
         <div class="button-review" @click="save">
           Сохранить результат
         </div>
-        <div class="button-review" @click="visible=false">
+        <div class="button-review" @click="close">
           Закрыть
         </div>
     </div>
@@ -34,20 +50,59 @@ export default {
     trySchoolboy: {
       type: Object,
       default() {
-        return null
+        return null;
+      }
+    },
+    testCases: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    result: {
+      type: [Number, String],
+      default() {
+        return 0;
       }
     }
   },
   data() {
     return {
       visible: false,
+      isLoadingResult: true,
+      resultTableHeader: [
+        { text: 'Время выполнения', value: 'time' },
+        { text: 'Статус', value: 'type' },
+        { text: 'Полученный результат', value: 'output' },
+      ],
+      statuses: {
+        RUNTIME_ERROR: 'Ошибка в исполнении',
+        COMPILATION_ERROR: 'Ошибка компиляции',
+        SUCCESS: 'Программа исполняется',
+        TIMEOUT: 'Превышено временное ограничение',
+      }
     };
+  },
+  computed: {
+    testCasesResult() {
+      return this.testCases;
+    }
   },
   methods: {
     save(){
       this.$emit('save');
       this.visible = false;
     },
+    getCorrectOutput(val) {
+      if (val && val.length > 150) {
+        return val.substring(0, 149);
+      }
+      return val;
+    },
+    close() {
+      this.$emit('close');
+      this.visible = false;
+    }
   },
   watch: {
     value: {
@@ -96,9 +151,10 @@ export default {
         flex-direction: column
         background: #5843BE
         border-radius: 10px
-        width: 600px
+        width: 800px
         height: fit-content
         max-height: 600px
+        overflow: auto
         top: 50%
         left: 50%
         transform: translate(-50%, -50%)
@@ -106,6 +162,7 @@ export default {
 
 
   .result
+    position: relative
     height: 4.5vh
     width: 100%
     border: 1px solid #8DCF00
@@ -125,11 +182,18 @@ export default {
     font-size: 18px
     line-height: 22px
 
+  .label
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+
 
   .button-container
     display: flex
     width: 100%
     column-gap: 20px
+    justify-content: center
 
   .modal-title
     font-weight: 600
@@ -137,5 +201,12 @@ export default {
     line-height: 30px
     margin-bottom: 30px
 
+  .task-cases-grid
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr
+
+  .modal-table
+    margin-bottom: 20px
+    overflow: auto
 
 </style>

@@ -1,7 +1,7 @@
 <template>
  <div v-if="task && isRouteAvailable('SCHOOLBOY')" class="task-container">
    <div class="main-info">
-       <task-parameters-layout :task="task"/>
+      <task-parameters-layout :task="task"/>
        <textarea
            v-if="trySchoolboy"
            class="code-space"
@@ -13,10 +13,15 @@
            @setActiveTry="putCodeInArea($event)" />
    </div>
    <div class="task-action">
+       <tree-select
+           style="width: 200px; height: 4vh"
+           v-model="lang"
+           placeholder=""
+           :options="langOptions"/>
        <div
            v-if="isShowReviewButton"
            class="button-review"
-           @click="isTryComplete=true"
+           @click="executeCode()"
        >
          <custom-icon
              name="eye"
@@ -25,9 +30,11 @@
          Проверить код
        </div>
        <modal-result
-           v-model="isTryComplete"
+           v-model="isModalShow"
            :try-schoolboy="trySchoolboy"
+           :test-cases="testCasesResult"
            @save="saveTry"
+           @close="isExecuteCode = false"
        />
        <div
            v-if="isShowClearButton"
@@ -62,12 +69,20 @@ export default {
   mixins: [ route ],
   data() {
     return {
-      isTryComplete: false,
       task: null,
       trySchoolboy: null,
       isTextAreaDisabled: false,
       triesList: [],
       isModalShow: false,
+      isExecuteCode: false,
+      testCases: [],
+      testCasesResult: [],
+      langOptions: [
+        { id: 'java', label: 'java' },
+        { id: 'cpp', label: 'c++'},
+        { id: 'c', label: 'c'},
+      ],
+      lang: null,
     }
   },
   async created() {
@@ -76,14 +91,14 @@ export default {
       this.initializeTry();
 
       await this.setTriesList();
-    }, 60);
+    }, 120);
   },
   computed: {
     isShowReviewButton() {
-      return !this.isTryComplete && this.trySchoolboy.code && !this.isTextAreaDisabled;
+      return !this.isExecuteCode && this.trySchoolboy.code && !this.isTextAreaDisabled;
     },
     isShowClearButton() {
-      return !this.isTryComplete && this.trySchoolboy.code
+      return !this.isExecuteCode && this.trySchoolboy.code;
     },
     ...mapGetters(['SCHOOLBOY_TASK_LIST', 'SCHOOLBOY']),
   },
@@ -108,21 +123,62 @@ export default {
           .catch(() => console.log('Хьюстон у нас проблемы'));
     },
     async saveTry() {
+      this.isExecuteCode = false;
       const arrLength = this.triesList.length;
       this.trySchoolboy.tryNumber = arrLength + 1;
 
-      // TODO
-      this.trySchoolboy.result = 0;
 
       const newTry = await http.saveTry(this.trySchoolboy);
       if (newTry) {
         this.triesList.push(newTry);
         this.initializeTry();
-        this.isTryComplete = false;
       }
+    },
+    getResult() {
+      let result = 100;
+
+      const initLength = this.testCasesResult.length;
+      const executionCase = this.testCasesResult
+          .filter(tc => tc.type === 'SUCCESS');
+      const executionCaseLength = executionCase.length;
+
+      if (executionCaseLength !== initLength) {
+        result = executionCaseLength / initLength;
+
+        if (result !== 0) {
+          const equalInputLength = executionCase.filter(ec => {
+            const testCase = this.testCases.find(tc => ec.id === tc.id)
+            return testCase.output === ec.output;
+          });
+          if (equalInputLength.length !== 0) {
+            result = equalInputLength / executionCaseLength;
+          }
+        }
+      }
+      return result;
     },
     initializeTry() {
       this.trySchoolboy = new TrySchoolboy({ schoolboyId: this.SCHOOLBOY.id, taskId: this.task.id });
+    },
+    async executeCode() {
+      this.isExecuteCode = true;
+      await http.getAllTestCases(this.trySchoolboy.taskId).then(
+          async (data) => {
+            this.testCases = data;
+            await this.executeAllTestCases().then(() => {
+              this.trySchoolboy.result = this.getResult();
+              this.isModalShow = true
+            });
+          }
+      );
+    },
+    async executeAllTestCases() {
+      const lang = this.lang ? this.lang.id : 'java';
+      for (let i = 0; i < this.testCases.length; i++) {
+        await http.executeTestCase(this.trySchoolboy.code, this.testCases[i], lang).then((data) => {
+          this.testCasesResult[i] = { ...data, id: this.testCases[i].id };
+        });
+      }
     },
     ...mapMutations(['CLEAR_ACTIVE_TRY']),
   },
@@ -156,6 +212,4 @@ export default {
    display: flex
    align-items: center
    column-gap: 20px
-
-
 </style>
